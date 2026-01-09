@@ -22,6 +22,7 @@ const userRegister = async (data) => {
 };
 const userLogin = async (data) => {
   const userData = await userModel.findOne({ email: data.email });
+  if (!userData) throw { statusCode: 404, message: "User not found." };
   const isPasswordMatch = bcrypt.compareSync(data.password, userData.password);
   if (!isPasswordMatch)
     throw { statusCode: 400, message: "Incorrect Password or Email" };
