@@ -72,26 +72,22 @@ const deleteProduct = async (productId) => {
   await productModel.findByIdAndDelete(productId);
 };
 
-const addedProduct = async (data, files, createdBy) => {
-  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", data.name)
-    .replace("%s", data.category)
-    .replace("%s", data.brand);
-  const aiDescription = data.description;
-  if (!aiDescription) {
-    try {
-       aiDescription = await promptGemini(promptMessage);
-    } catch (error) {
-      // res.status(error.statusCode||500).send(error.message);
-    }
-  }
-
+const createProduct = async (data, files, createdBy) => {
   const uploadedFiles = await uploadFile(files);
+
+  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", data.name)
+    .replace("%s", data.brand)
+    .replace("%s", data.category);
+
+  const description = data.description ?? (await promptGemini(promptMessage));
+
   const createdProduct = await productModel.create({
     ...data,
     createdBy,
     imageUrls: uploadedFiles.map((item) => item?.url),
-    productDescription: aiDescription,
+    description,
   });
+
   return createdProduct;
 };
 export default {
@@ -100,6 +96,6 @@ export default {
   updateProduct,
   deleteProduct,
   getProductById,
-  addedProduct,
+  createProduct,
   getProducts,
 };

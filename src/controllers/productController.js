@@ -57,7 +57,7 @@ const deleteProduct = async (req, res) => {
 
 const newProduct = async (req, res) => {
   try {
-    const createdProduct = await productServices.addedProduct(
+    const createdProduct = await productServices.createProduct(
       req.body,
       req.files,
       req.user._id
