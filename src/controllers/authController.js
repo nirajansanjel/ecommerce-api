@@ -38,7 +38,7 @@ const userLogin = async (req, res) => {
     const authToken = createToken(data);
     res.cookie("authToken", authToken, { maxAge: 86400 * 1000 });
 
-    res.status(200).json(data);
+    res.status(200).json({...data,authToken});
   } catch (error) {
     res.status(500).send(error.message);
   }
