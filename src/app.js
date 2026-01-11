@@ -18,14 +18,17 @@ const app = express();
 database();
 connectCloudinary();
 app.use(cors());
+app.options("*", cors());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(logger);
 
 app.get("/", (req, res) => {
   res.json({
     name: config.name,
   });
 });
-app.use(logger);
-app.use(bodyParser.json());
 
 app.use("/api/products", upload.array("images", 5), productRoutes);
 app.use("/api", upload.single("image"), userRoute);
