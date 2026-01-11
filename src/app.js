@@ -18,7 +18,6 @@ const app = express();
 database();
 connectCloudinary();
 app.use(cors());
-app.options("*", cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
