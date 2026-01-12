@@ -18,6 +18,7 @@ const userRegister = async (data) => {
     name: registeredUser.name,
     email: registeredUser.email,
     phone: registeredUser.phone,
+    address:registeredUser.address
   };
 };
 const userLogin = async (data) => {
@@ -33,6 +34,7 @@ const userLogin = async (data) => {
     email: userData.email,
     phone: userData.phone,
     roles: userData.role,
+    address:userData.address
   };
 };
 const forgotPassword = async (email) => {

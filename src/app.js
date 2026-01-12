@@ -12,30 +12,14 @@ import userAuth from "./routes/authRoute.js";
 import logger from "./middlewares/logger.js";
 import connectCloudinary from "./config/cloudinary.js";
 
-const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
+
+const upload = multer({ storage: multer.memoryStorage() });
+
 database();
 connectCloudinary();
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
-}));
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    return res.sendStatus(200);
-  }
-  next();
-});
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 

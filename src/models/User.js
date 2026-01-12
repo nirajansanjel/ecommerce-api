@@ -36,7 +36,18 @@ const userSchema = new mongoose.Schema({
     default: Date.now(),
   },
   address: {
-    type: String,
+    province: {
+      type:String,
+      required:[true,"Province Address is required"]
+    },
+    city: {
+      type:String,
+      required:[true,"City Address is required"]
+    },
+    country: {
+      type:String,
+      default:"Nepal"
+    }
   },
   profileImage: {
     type: String,
