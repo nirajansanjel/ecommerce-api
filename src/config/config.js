@@ -4,7 +4,7 @@ dotenv.config();
 const config = {
   name: "Hello " || "",
   appUrl : process.env.APP_URL,
-  port: process.env.PORT || 5000,
+  port: process.env.PORT || 3000,
   MONGODB: process.env.MONGODB_URL,
   jwtSecret: process.env.JWT_secret || "",
   cloudinary: {
