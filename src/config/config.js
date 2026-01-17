@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
-  name: "Hello " || "",
+  name: "Any Buy " || "",
   appUrl : process.env.APP_URL,
   port: process.env.PORT || 3000,
   MONGODB: process.env.MONGODB_URL,

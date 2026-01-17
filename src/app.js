@@ -28,6 +28,9 @@ app.use(logger);
 app.get("/", (req, res) => {
   res.json({
     name: config.name,
+    port: config.port,
+    status: "Running...",
+    version: "1.0.0",
   });
 });
 
