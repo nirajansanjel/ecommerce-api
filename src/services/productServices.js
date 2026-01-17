@@ -1,4 +1,3 @@
-import fs from "fs";
 import productModel from "../models/Product.js";
 import uploadFile from "../utils/file.js";
 import promptGemini from "../utils/gemini.js";
@@ -79,6 +78,7 @@ const createProduct = async (data, files, createdBy) => {
     .replace("%s", data.brand)
     .replace("%s", data.category);
 
+  
   const description = data.description ?? (await promptGemini(promptMessage));
 
   const createdProduct = await productModel.create({

@@ -5,22 +5,23 @@ const promptGemini = async (prompt) => {
   const response = await axios.post(
     config.gemini.apiUrl,
     {
-    "contents": [
-      {
-        "parts": [
-          {
-            "text": prompt
-          }
-        ]
-      }
-    ]
-  },
+      contents: [
+        {
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
+        },
+      ],
+    },
     {
       headers: {
-        "X-goog-api-key":`${config.gemini.apiKey}`,
+        "X-goog-api-key": config.gemini.apiKey,
       },
     }
   );
+
   return response.data.candidates[0].content.parts[0].text;
 };
-export default  promptGemini ;
+export default promptGemini;
