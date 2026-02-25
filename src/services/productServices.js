@@ -78,7 +78,6 @@ const createProduct = async (data, files, createdBy) => {
     .replace("%s", data.brand)
     .replace("%s", data.category);
 
-  
   const description = data.description ?? (await promptGemini(promptMessage));
 
   const createdProduct = await productModel.create({
@@ -90,6 +89,13 @@ const createProduct = async (data, files, createdBy) => {
 
   return createdProduct;
 };
+const getBrands = async () => {
+  return await productModel.distinct("brand");
+};
+const getCategories = async () => {
+  return await productModel.distinct("category");
+};
+
 export default {
   filteredProducts,
   isRatedProduct,
@@ -98,4 +104,6 @@ export default {
   getProductById,
   createProduct,
   getProducts,
+  getBrands,
+  getCategories,
 };
