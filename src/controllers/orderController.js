@@ -9,7 +9,7 @@ const Orders = async (req, res) => {
 };
 const ordersByUser = async (req, res) => {
   try {
-    const data = await orderService.getOrdersByUser(req.user._id);
+    const data = await orderService.getOrdersByUser(req.query,req.user._id);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).send(error.message);

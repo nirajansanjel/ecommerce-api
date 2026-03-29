@@ -1,7 +1,10 @@
 import model from "../models/Order.js";
 import Payment from "../models/Payment.js";
 import payment from "../utils/payment.js";
-import { ORDER_STATUS_CONFIRMED } from "../constants/orderStatus.js";
+import {
+  ORDER_STATUS_CONFIRMED,
+  ORDER_STATUS_PENDING,
+} from "../constants/orderStatus.js";
 const getOrders = async () => {
   return await model
     .find()
@@ -10,9 +13,13 @@ const getOrders = async () => {
     .populate("payment");
 };
 
-const getOrdersByUser = async (user) => {
+const getOrdersByUser = async (query, user) => {
   return await model
-    .find({ userId: user })
+    .find({
+      status: query?.status || ORDER_STATUS_PENDING,
+      userId: user,
+    })
+    .sort({ createdAt: -1 })
     .populate("orderItems.product")
     .populate("userId", ["name", "email", "phone", "address"])
     .populate("payment");
@@ -28,7 +35,7 @@ const getOrderById = async (id) => {
 const createOrder = async (data, userId) => {
   const orderNumber = crypto.randomUUID();
   return (await model.create({ ...data, userId, orderNumber })).populate(
-    "orderItems.product"
+    "orderItems.product",
   );
 };
 
@@ -38,7 +45,7 @@ const updateOrder = async (id, data) => {
     {
       status: data.status,
     },
-    { new: true }
+    { new: true },
   );
 
   if (!result) throw { message: "Update unsuccessful!" };
@@ -78,7 +85,7 @@ const confirmOrderPayment = async (id, status) => {
     {
       status: ORDER_STATUS_CONFIRMED,
     },
-    { new: true }
+    { new: true },
   );
 };
 const getOrdersOfMerchant = async (merchantId) => {
@@ -122,15 +129,17 @@ const getOrdersOfMerchant = async (merchantId) => {
     },
   ]);
 
-  return orders.map((order) => {
-    const filteredOrders = order.orderItems.filter(
-      (item) => item.createdBy == merchantId
-    );
-    return {
-      ...order,
-      orderItems: filteredOrders,
-    };
-  }).filter((order) => order.orderItems.length > 0);;
+  return orders
+    .map((order) => {
+      const filteredOrders = order.orderItems.filter(
+        (item) => item.createdBy == merchantId,
+      );
+      return {
+        ...order,
+        orderItems: filteredOrders,
+      };
+    })
+    .filter((order) => order.orderItems.length > 0);
 };
 
 export default {
