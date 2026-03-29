@@ -5,6 +5,8 @@ import {
   ORDER_STATUS_CONFIRMED,
   ORDER_STATUS_PENDING,
 } from "../constants/orderStatus.js";
+import { ADMIN } from "../constants/roles.js";
+
 const getOrders = async () => {
   return await model
     .find()
@@ -141,6 +143,16 @@ const getOrdersOfMerchant = async (merchantId) => {
     })
     .filter((order) => order.orderItems.length > 0);
 };
+const deleteOrder = async (id, user) => {
+  const order = await getOrderById(id); 
+  if (order.userId._id != user._id && !user.roles.includes(ADMIN)) {
+    throw {
+      statusCode: 403,
+      message: "Access Denied!",
+    };
+  }
+  return await model.findByIdAndDelete(id);
+};
 
 export default {
   getOrders,
@@ -151,4 +163,5 @@ export default {
   getOrderById,
   confirmOrderPayment,
   getOrdersOfMerchant,
+  deleteOrder,
 };

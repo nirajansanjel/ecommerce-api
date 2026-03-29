@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", auth, roleBasedAuth(ADMIN), orderController.Orders);
 router.get("/user", auth, orderController.ordersByUser);
 router.get("/merchant", auth, orderController.getOrdersOfMerchant);
-router.get("/user/:id", auth, orderController.getOrderById);
+router.get("/user/:id",auth, roleBasedAuth(ADMIN), orderController.getOrderById);
 
 router.post("/create", auth, orderController.createdOrder);
 router.put(
@@ -19,5 +19,7 @@ router.put(
 );
 router.post("/:id/payment/khalti", orderController.payViaKhalti);
 router.put("/:id/confirm-payment", orderController.confirmOrderPayment);
+router.delete("/:id",auth, orderController.deleteOrder);
+
 
 export default router;

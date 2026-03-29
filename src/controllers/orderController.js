@@ -1,4 +1,5 @@
 import orderService from "../services/orderService.js";
+
 const Orders = async (req, res) => {
   try {
     const data = await orderService.getOrders();
@@ -9,7 +10,7 @@ const Orders = async (req, res) => {
 };
 const ordersByUser = async (req, res) => {
   try {
-    const data = await orderService.getOrdersByUser(req.query,req.user._id);
+    const data = await orderService.getOrdersByUser(req.query, req.user._id);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).send(error.message);
@@ -73,6 +74,14 @@ const getOrdersOfMerchant = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+const deleteOrder = async (req, res) => {
+  try {
+    await orderService.deleteOrder(req.params.id, req.user);
+    res.status(200).send("Order Deleted Successfully.");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 export default {
   Orders,
   createdOrder,
@@ -81,5 +90,6 @@ export default {
   payViaKhalti,
   getOrderById,
   confirmOrderPayment,
-  getOrdersOfMerchant
+  getOrdersOfMerchant,
+  deleteOrder
 };
