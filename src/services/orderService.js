@@ -53,8 +53,23 @@ const updateOrder = async (id, data) => {
   if (!result) throw { message: "Update unsuccessful!" };
   return result;
 };
-const paymentViaKhalti = async (id) => {
+const paymentViaKhalti = async (id, user) => {
   const order = await getOrderById(id);
+
+  if (!order) {
+    throw {
+      statusCode: 404,
+      message: "Order Not Found!",
+    };
+  }
+
+
+  if (order.userId._id != user._id) {
+    throw {
+      statusCode: 403,
+      message: "Access Denied!",
+    };
+  }
   const transactionId = crypto.randomUUID();
   const paymentCreate = await Payment.create({
     amount: order.totalPrice,
@@ -144,7 +159,7 @@ const getOrdersOfMerchant = async (merchantId) => {
     .filter((order) => order.orderItems.length > 0);
 };
 const deleteOrder = async (id, user) => {
-  const order = await getOrderById(id); 
+  const order = await getOrderById(id);
   if (order.userId._id != user._id && !user.roles.includes(ADMIN)) {
     throw {
       statusCode: 403,

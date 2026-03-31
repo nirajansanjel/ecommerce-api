@@ -48,7 +48,7 @@ const payViaKhalti = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const result = await orderService.paymentViaKhalti(id);
+    const result = await orderService.paymentViaKhalti(id,req.user);
 
     res.json(result);
   } catch (error) {

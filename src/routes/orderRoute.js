@@ -17,7 +17,7 @@ router.put(
   roleBasedAuth(ADMIN),
   orderController.updateOrderStatus
 );
-router.post("/:id/payment/khalti", orderController.payViaKhalti);
+router.post("/:id/payment/khalti",auth, orderController.payViaKhalti);
 router.put("/:id/confirm-payment", orderController.confirmOrderPayment);
 router.delete("/:id",auth, orderController.deleteOrder);
 
