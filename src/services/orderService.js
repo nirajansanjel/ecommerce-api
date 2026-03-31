@@ -61,6 +61,7 @@ const paymentViaKhalti = async (id, user) => {
       statusCode: 404,
       message: "Order Not Found!",
     };
+    
   }
 
 
@@ -71,6 +72,7 @@ const paymentViaKhalti = async (id, user) => {
     };
   }
   const transactionId = crypto.randomUUID();
+
   const paymentCreate = await Payment.create({
     amount: order.totalPrice,
     method: "online",
@@ -78,13 +80,12 @@ const paymentViaKhalti = async (id, user) => {
   });
   await model.findByIdAndUpdate(id, { payment: paymentCreate._id });
 
-  const paymentData = await payment.payViaKhalti({
+ return await payment.payViaKhalti({
     amount: order.totalPrice * 100,
-    purchaseOrderId: order.id,
+    purchaseOrderId: id,
     purchaseOrderName: order.orderNumber,
     customer: order.userId,
   });
-  return paymentData;
 };
 
 const confirmOrderPayment = async (id, status) => {
