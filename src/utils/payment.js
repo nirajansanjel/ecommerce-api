@@ -16,7 +16,7 @@ const payViaKhalti = async (data) => {
       message: " Purchase order name  is required.",
     };
   const body = {
-    return_url: `${config.appUrl}`,
+    return_url: `https://npl-website.vercel.app/`,
     website_url: `${config.appUrl}`,
     amount: data.amount,
     purchase_order_id: data.purchaseOrderId,
