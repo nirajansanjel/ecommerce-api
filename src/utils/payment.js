@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import config from "../config/config.js";
 import axios from "axios";
 
@@ -6,12 +7,11 @@ const payViaKhalti = async (data) => {
 
   if (!data.amount) throw { message: "Payment Amount is required." };
 
-
-  if (!data.purchaseOrderId )
+  if (!data.purchaseOrderId)
     throw {
       message: " Purchase order id  is required.",
     };
-    if (!data.purchaseOrderName )
+  if (!data.purchaseOrderName)
     throw {
       message: " Purchase order name  is required.",
     };
@@ -29,16 +29,41 @@ const payViaKhalti = async (data) => {
   };
 
   const result = await axios.post(
-  `${config.khaltiPayment.khaltiApiURL}/epayment/initiate/`,
-  body,
-  {
-    headers: {
-      Authorization: `Key ${config.khaltiPayment.khaltiApiKey}`,
-     
+    `${config.khaltiPayment.khaltiApiURL}/epayment/initiate/`,
+    body,
+    {
+      headers: {
+        Authorization: `Key ${config.khaltiPayment.khaltiApiKey}`,
+      },
     },
-  }
-);
+  );
 
-return result.data;
+  return result.data;
 };
-export default {payViaKhalti};
+const payViaStripe = async (data) => {
+  const stripe = new Stripe(config.stripe.secretKey);
+  if (!data) throw { message: "Payment Data is required." };
+
+  if (!data.amount) throw { message: "Payment Amount is required." };
+
+  if (!data.orderId)
+    throw {
+      message: " Purchase order id  is required.",
+    };
+  if (!data.orderName)
+    throw {
+      message: " Purchase order name  is required.",
+    };
+  return await stripe.paymentIntents.create({
+    amount: data.amount,
+    currency: data.currency || "npr",
+    metadata: {
+      customer_email: data.customer.email,
+      customer_name: data.customer.name,
+      customer_phone: data.customer.phone,
+      order_id: data.orderId,
+      order_name: data.orderName,
+    },
+  });
+};
+export default { payViaKhalti, payViaStripe };

@@ -18,6 +18,7 @@ router.put(
   orderController.updateOrderStatus
 );
 router.post("/:id/payment/khalti",auth, orderController.payViaKhalti);
+router.post("/:id/payment/stripe",auth, orderController.payViaStripe);
 router.put("/:id/confirm-payment", orderController.confirmOrderPayment);
 router.delete("/:id",auth, orderController.deleteOrder);
 

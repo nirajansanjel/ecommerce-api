@@ -48,7 +48,18 @@ const payViaKhalti = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const result = await orderService.paymentViaKhalti(id,req.user);
+    const result = await orderService.paymentViaKhalti(id, req.user);
+
+    res.json(result);
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
+};
+const payViaStripe = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const result = await orderService.paymentViaStripe(id, req.user);
 
     res.json(result);
   } catch (error) {
@@ -88,8 +99,9 @@ export default {
   ordersByUser,
   updateOrderStatus,
   payViaKhalti,
+  payViaStripe,
   getOrderById,
   confirmOrderPayment,
   getOrdersOfMerchant,
-  deleteOrder
+  deleteOrder,
 };

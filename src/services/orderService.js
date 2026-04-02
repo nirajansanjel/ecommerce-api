@@ -87,6 +87,40 @@ const paymentViaKhalti = async (id, user) => {
     customer: order.userId,
   });
 };
+const paymentViaStripe = async (id, user) => {
+  const order = await getOrderById(id);
+
+  if (!order) {
+    throw {
+      statusCode: 404,
+      message: "Order Not Found!",
+    };
+    
+  }
+
+
+  if (order.userId._id != user._id) {
+    throw {
+      statusCode: 403,
+      message: "Access Denied!",
+    };
+  }
+  const transactionId = crypto.randomUUID();
+
+  const paymentCreate = await Payment.create({
+    amount: order.totalPrice,
+    method: "online",
+    transactionId,
+  });
+  await model.findByIdAndUpdate(id, { payment: paymentCreate._id });
+
+return await payment.payViaStripe({
+    amount: order.totalPrice * 100,
+    orderId: id,
+    orderName: order.orderNumber,
+    customer: order.userId,
+  });
+};
 
 const confirmOrderPayment = async (id, status) => {
   const order = await getOrderById(id);
@@ -180,4 +214,5 @@ export default {
   confirmOrderPayment,
   getOrdersOfMerchant,
   deleteOrder,
+  paymentViaStripe
 };
