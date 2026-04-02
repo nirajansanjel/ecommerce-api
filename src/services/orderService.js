@@ -115,7 +115,7 @@ const paymentViaStripe = async (id, user) => {
   await model.findByIdAndUpdate(id, { payment: paymentCreate._id });
 
 return await payment.payViaStripe({
-    amount: order.totalPrice * 100,
+    amount: order.totalPrice,
     orderId: id,
     orderName: order.orderNumber,
     customer: order.userId,
