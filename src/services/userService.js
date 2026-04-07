@@ -61,7 +61,7 @@ const updateUserRoles = async (id, data, authUser) => {
   }
   const updatedUser = await userModel.findByIdAndUpdate(
     id,
-    { roles: data.roles },
+    { roles: data.roles, },
     {
       new: true,
     },
