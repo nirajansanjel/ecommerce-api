@@ -10,6 +10,7 @@ import { ADMIN } from "../constants/roles.js";
 const getOrders = async () => {
   return await model
     .find()
+    .sort({ createdAt: -1 })
     .populate("orderItems.product")
     .populate("userId", ["name", "email", "phone", "address"])
     .populate("payment");
@@ -61,9 +62,7 @@ const paymentViaKhalti = async (id, user) => {
       statusCode: 404,
       message: "Order Not Found!",
     };
-    
   }
-
 
   if (order.userId._id != user._id) {
     throw {
@@ -80,7 +79,7 @@ const paymentViaKhalti = async (id, user) => {
   });
   await model.findByIdAndUpdate(id, { payment: paymentCreate._id });
 
- return await payment.payViaKhalti({
+  return await payment.payViaKhalti({
     amount: order.totalPrice * 100,
     purchaseOrderId: id,
     purchaseOrderName: order.orderNumber,
@@ -95,9 +94,7 @@ const paymentViaStripe = async (id, user) => {
       statusCode: 404,
       message: "Order Not Found!",
     };
-    
   }
-
 
   if (order.userId._id != user._id) {
     throw {
@@ -114,7 +111,7 @@ const paymentViaStripe = async (id, user) => {
   });
   await model.findByIdAndUpdate(id, { payment: paymentCreate._id });
 
-return await payment.payViaStripe({
+  return await payment.payViaStripe({
     amount: order.totalPrice,
     orderId: id,
     orderName: order.orderNumber,
@@ -214,5 +211,5 @@ export default {
   confirmOrderPayment,
   getOrdersOfMerchant,
   deleteOrder,
-  paymentViaStripe
+  paymentViaStripe,
 };

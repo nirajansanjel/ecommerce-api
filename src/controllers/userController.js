@@ -39,6 +39,20 @@ const updateUser = async (req, res) => {
     res.send(error.message);
   }
 };
+const updateUserRoles = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const updatedUser = await userService.updateUserRoles(
+      userId,
+      req.body,
+      req.user
+    );
+    res.status(201).json(updatedUser);
+  } catch (error) {
+    res.send(error.message);
+  }
+};
 const createMerchant = async (req, res) => {
   const userId = req.body.userId;
 
@@ -74,6 +88,7 @@ export default {
   getUsers,
   getUserById,
   updateUser,
+  updateUserRoles,
   userDelete,
   UpdateProfileImage,
   createMerchant,

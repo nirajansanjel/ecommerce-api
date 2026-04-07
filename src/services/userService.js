@@ -27,7 +27,7 @@ const updateUserProfileImage = async (id, photo) => {
   const userData = await userModel.findByIdAndUpdate(
     id,
     { profileImage: uploadedFiles[0]?.url },
-    { new: true }
+    { new: true },
   );
   return userData;
 };
@@ -37,26 +37,44 @@ const createMerchant = async (data) => {
       statusCode: 400,
       message: "User Id is required.",
     };
-  const userData =  await userModel.findById(data)
-   if(!userData)  throw {
+  const userData = await userModel.findById(data);
+  if (!userData)
+    throw {
       statusCode: 400,
       message: "User Not found.",
     };
   return await userModel.findByIdAndUpdate(
     data,
     {
-      role: [USER,MERCHANT],
+      role: [USER, MERCHANT],
     },
-    { new: true }
+    { new: true },
   );
 };
-
+const updateUserRoles = async (id, data, authUser) => {
+ 
+  if (!authUser.roles.includes(ADMIN)) {
+    throw {
+      statusCode: 403,
+      message: "Access Denied",
+    };
+  }
+  const updatedUser = await userModel.findByIdAndUpdate(
+    id,
+    { roles: data.roles },
+    {
+      new: true,
+    },
+  );
+  return updatedUser;
+};
 export default {
   createUser,
   getUsers,
   getUserById,
   updateUser,
+  updateUserRoles,
   userDelete,
   updateUserProfileImage,
-  createMerchant
+  createMerchant,
 };
