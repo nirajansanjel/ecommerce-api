@@ -41,7 +41,7 @@ const userLogin = async (data) => {
 const forgotPassword = async (email) => {
   const user = await userModel.findOne({ email });
 
-  if (!user) throw { message: "User Not Found" };
+  if (!user) return { message: "User Not Found" };
 
   const token = crypto.randomUUID();
   await ResetPassword.create({ userId: user._id, token });
