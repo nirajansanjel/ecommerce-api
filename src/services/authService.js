@@ -18,8 +18,8 @@ const userRegister = async (data) => {
     name: registeredUser.name,
     email: registeredUser.email,
     phone: registeredUser.phone,
-    address:registeredUser.address,
-    roles:registeredUser.roles
+    address: registeredUser.address,
+    roles: registeredUser.roles,
   };
 };
 const userLogin = async (data) => {
@@ -35,12 +35,14 @@ const userLogin = async (data) => {
     email: userData.email,
     phone: userData.phone,
     roles: userData.roles,
-    address:userData.address
+    address: userData.address,
   };
 };
 const forgotPassword = async (email) => {
   const user = await userModel.findOne({ email });
-  if (!user) return { message: "User Not Found" };
+
+  if (!user) throw { message: "User Not Found" };
+
   const token = crypto.randomUUID();
   await ResetPassword.create({ userId: user._id, token });
   await sendEmail(email, {
@@ -49,7 +51,7 @@ const forgotPassword = async (email) => {
     <div>
   <h1>Please click the link below to change the password!</h1>
   <br />
-  <a href="${config.port}/reset-password?userId=${user._id}&token=${token}" 
+  <a href="${config.appUrl}/reset-password?userId=${user._id}&token=${token}" 
   >Reset Password </a>
 </div>
  `,
