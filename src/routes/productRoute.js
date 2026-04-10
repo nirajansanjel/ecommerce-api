@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/", products.filteredProducts);
 router.get("/rating", products.ratedProduct);
 router.get("/all", products.getProducts);
+router.get("/count", products.getProductsCount);
 router.get("/brands", products.getBrands);
 router.get("/categories", products.getCategories);
 router.get("/:id", products.productById);

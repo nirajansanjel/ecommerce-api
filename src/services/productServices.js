@@ -49,6 +49,10 @@ const getProducts = async () => {
   const result = await productModel.find();
   return result;
 };
+const getProductsCount = async () => {
+  const result = await productModel.countDocuments();
+  return result;
+};
 const updateProduct = async (id, data, files, userId) => {
   const product = await getProductById(id);
 
@@ -106,4 +110,5 @@ export default {
   getProducts,
   getBrands,
   getCategories,
+  getProductsCount
 };
